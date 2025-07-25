@@ -28,7 +28,7 @@ let selectionMode = false;
 // Load playlists
 function loadPlaylists(playlistName) {
   currentPlaylist = playlistName;
-  fetch("/playlists")
+  fetch("/api/playlists")
     .then((res) => res.json())
     .then((data) => {
       playlistList.innerHTML = "";
@@ -70,7 +70,7 @@ function showToast(message) {
 function createPlaylist() {
   const name = prompt("Enter playlist name:")?.trim();
   if (!name) return showToast("Playlist name cannot be empty.");
-  fetch("/playlists", {
+  fetch("/api/playlists", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name }),
@@ -93,7 +93,7 @@ function createPlaylist() {
 function deletePlaylist() {
   const name = prompt("Enter playlist name to delete:")?.trim();
   if (!name) return showToast("Playlist name cannot be empty.");
-  fetch(`/playlists/${encodeURIComponent(name)}`, {
+  fetch(`/api/playlists/${encodeURIComponent(name)}`, {
     method: "DELETE",
   })
     .then((res) => {
@@ -113,7 +113,7 @@ loadPlaylists();
 
 // Fetch and render songs
 function loadAllSongs() {
-  fetch("/songs")
+  fetch("/api/songs")
     .then((res) => res.json())
     .then((data) => {
       songs = data
@@ -267,7 +267,7 @@ progressContainer.addEventListener("click", function (e) {
   }
 });
 function loadPlaylistSongs(playlistName) {
-  fetch(`/playlists/${encodeURIComponent(playlistName)}/songs`)
+  fetch(`/api/playlists/${encodeURIComponent(playlistName)}/songs`)
     .then((res) => res.json())
     .then((playlistSongs) => {
       if (!Array.isArray(playlistSongs)) {
@@ -296,7 +296,7 @@ document.getElementById("add-song-button").addEventListener("click", () => {
   fetch("/songs")
     .then((res) => res.json())
     .then((allSongs) => {
-      fetch(`/playlists/${encodeURIComponent(playlistName)}/songs`)
+      fetch(`/api/playlists/${encodeURIComponent(playlistName)}/songs`)
         .then((res) => res.json())
         .then((playlistSongs) => {
           const playlistSet = new Set(
@@ -350,11 +350,14 @@ document.getElementById("add-song-button").addEventListener("click", () => {
 
             Promise.all(
               selectedSongs.map((song) =>
-                fetch(`/playlists/${encodeURIComponent(playlistName)}/songs`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ song }),
-                })
+                fetch(
+                  `/api/playlists/${encodeURIComponent(playlistName)}/songs`,
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ song }),
+                  }
+                )
               )
             )
               .then(() => {
@@ -383,7 +386,7 @@ document.getElementById("delete-song-button").addEventListener("click", () => {
     .trim();
   if (!playlistName) return showToast("No playlist selected");
 
-  fetch(`/playlists/${encodeURIComponent(playlistName)}/songs`)
+  fetch(`/api/playlists/${encodeURIComponent(playlistName)}/songs`)
     .then((res) => res.json())
     .then((playlistSongs) => {
       if (!playlistSongs.length) return showToast("Playlist is empty.");
@@ -430,7 +433,7 @@ document.getElementById("delete-song-button").addEventListener("click", () => {
         Promise.all(
           selectedSongs.map((song) =>
             fetch(
-              `/playlists/${encodeURIComponent(
+              `/api/playlists/${encodeURIComponent(
                 playlistName
               )}/songs/${encodeURIComponent(song)}`,
               {
@@ -599,13 +602,13 @@ document
     for (let song of selectedSongs) {
       try {
         if (selectionMode === "add") {
-          await fetch(`/playlists/${playlistName}/songs`, {
+          await fetch(`/api/playlists/${playlistName}/songs`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ song }),
           });
         } else if (selectionMode === "delete") {
-          await fetch(`/playlists/${playlistName}/songs`, {
+          await fetch(`/api/playlists/${playlistName}songs`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ song }),
