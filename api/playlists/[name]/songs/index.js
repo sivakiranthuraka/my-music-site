@@ -13,7 +13,7 @@ function savePlaylists(data) {
 }
 
 export default function handler(req, res) {
-  const { name } = req.query;
+  const name = decodeURIComponent(req.query.name);
   const playlists = getPlaylists();
 
   if (!playlists[name]) {
