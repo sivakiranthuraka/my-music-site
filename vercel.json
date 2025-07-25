@@ -1,14 +1,22 @@
 {
   "rewrites": [
     { "source": "/songs", "destination": "/api/songs" },
-    { "source": "/playlists", "destination": "/api/playlists" },
+
     {
       "source": "/playlists/:playlistName/songs/:songName",
       "destination": "/api/playlists/:playlistName/songs/:songName"
     },
     {
+      "source": "/playlists/:playlistName/songs",
+      "destination": "/api/playlists/:playlistName/songs"
+    },
+    {
       "source": "/playlists/:name",
       "destination": "/api/playlists/:name"
+    },
+    {
+      "source": "/playlists",
+      "destination": "/api/playlists"
     }
   ]
 }
