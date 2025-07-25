@@ -4,12 +4,23 @@ import path from "path";
 const playlistsFile = path.join(process.cwd(), "playlists.json");
 
 function getPlaylists() {
-  if (!fs.existsSync(playlistsFile)) return {};
-  return JSON.parse(fs.readFileSync(playlistsFile, "utf8"));
+  try {
+    if (!fs.existsSync(playlistsFile)) return {};
+    return JSON.parse(fs.readFileSync(playlistsFile, "utf8"));
+  } catch (err) {
+    console.error("Error reading playlists.json:", err);
+    return {};
+  }
 }
 
 function savePlaylists(data) {
-  fs.writeFileSync(playlistsFile, JSON.stringify(data, null, 2));
+  if (process.env.NODE_ENV === "development") {
+    fs.writeFileSync(playlistsFile, JSON.stringify(data, null, 2));
+  } else {
+    console.warn(
+      "Attempted to save playlists in production — operation skipped."
+    );
+  }
 }
 
 export default function handler(req, res) {
