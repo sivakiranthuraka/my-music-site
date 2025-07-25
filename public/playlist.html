@@ -1,0 +1,24 @@
+<!-- public/playlist.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Playlist Page</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1 id="playlist-title">Playlist</h1>
+    <div id="song-list"></div>
+
+    <script>
+      // Get playlist name from URL
+      const params = new URLSearchParams(window.location.search);
+      const playlistName = params.get("name");
+
+      document.getElementById("playlist-title").textContent =
+        "Playlist: " + playlistName;
+
+      // TODO: Fetch songs from playlist (backend route coming next)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rowdy's Music Player</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <meta
+      name="description"
+      content="Rowdy's personal music player for streaming and playlists."
+    />
+    <link rel="icon" href="favicon.ico" />
+  </head>
+  <body>
+    <noscript>
+      <p style="color: red; text-align: center; font-weight: bold">
+        ⚠️ This music player requires JavaScript to function properly.
+      </p>
+    </noscript>
+
+    <div class="player-container">
+      <header>
+        <h1>🎵 Rowdy's Music Player</h1>
+        <input
+          type="text"
+          id="search"
+          placeholder="Search songs..."
+          class="search-bar"
+          aria-label="Search songs"
+        />
+      </header>
+
+      <!-- Centered Playlist Dropdown -->
+      <div id="top-controls">
+        <div class="playlist-dropdown">
+          <button
+            id="playlist-button"
+            aria-haspopup="true"
+            aria-expanded="false"
+            type="button"
+          >
+            🎵 My Playlists ▼
+          </button>
+          <div id="playlistListContainer" class="dropdown-menu">
+            <div id="playlistList"></div>
+            <hr />
+            <button type="button" id="create-playlist">Create Playlist</button>
+            <button type="button" id="delete-playlist">Delete Playlist</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Back to All Songs -->
+      <button
+        id="home-button"
+        class="playlist-item"
+        style="visibility: hidden; opacity: 0; transition: opacity 0.3s ease"
+      >
+        Home
+      </button>
+
+      <!-- Playlist-specific Actions -->
+      <div id="playlist-actions" style="display: none; margin: 10px 0">
+        <button id="add-song-button">Add Songs</button>
+        <button id="delete-song-button">Delete Songs</button>
+      </div>
+
+      <!-- Add Songs Grid Container -->
+      <div
+        id="add-songs-container"
+        class="song-grid"
+        style="display: none"
+      ></div>
+
+      <!-- Confirm/Cancel Buttons -->
+      <div id="confirm-actions" style="display: none; margin: 10px 0">
+        <button id="confirm-button">Confirm</button>
+        <button id="cancel-button">Cancel</button>
+      </div>
+
+      <!-- Main Song Grid -->
+      <div id="song-list" class="song-grid"></div>
+    </div>
+
+    <!-- Floating Bottom Audio Control Panel -->
+    <div class="audio-bar">
+      <div class="audio-bar-content">
+        <!-- Left: Current song -->
+        <div class="audio-left">
+          <span id="current-song">Now Playing: -</span>
+        </div>
+
+        <!-- Center: Controls -->
+        <div class="audio-center">
+          <button onclick="prevSong()" title="Previous" type="button">
+            <i class="fas fa-backward" aria-hidden="true"></i>
+          </button>
+          <button onclick="playPause()" title="Play/Pause" type="button">
+            <i class="fas fa-play" id="play-icon" aria-hidden="true"></i>
+          </button>
+          <button onclick="nextSong()" title="Next" type="button">
+            <i class="fas fa-forward" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <!-- Right: Time & Volume -->
+        <div class="audio-right">
+          <i
+            class="fas fa-volume-up"
+            style="color: white; font-size: 16px"
+            aria-hidden="true"
+          ></i>
+          <input
+            type="range"
+            id="volume"
+            min="0"
+            max="1"
+            step="0.01"
+            title="Volume"
+          />
+        </div>
+      </div>
+
+      <!-- Time Display -->
+      <div class="time-info">
+        <span id="current-time">0:00</span>
+        <span id="total-duration">0:00</span>
+      </div>
+
+      <!-- Progress Bar -->
+      <div id="progress-container">
+        <div id="progress"></div>
+      </div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="audio-player"></audio>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- JS -->
+    <script src="script.js" defer></script>
+  </body>
+</html>
