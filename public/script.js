@@ -593,9 +593,12 @@ document
     const selectedCheckboxes = document.querySelectorAll(
       ".song-checkbox:checked"
     );
-    const selectedSongs = Array.from(selectedCheckboxes).map((cb) =>
-      cb.parentElement.querySelector("p").textContent.trim()
-    );
+    const selectedSongs = Array.from(selectedCheckboxes)
+      .map((cb) => {
+        const p = cb.parentElement.querySelector("p");
+        return p ? p.textContent.trim() : null;
+      })
+      .filter((song) => song); // removes nulls
 
     const playlistName = currentPlaylist; // use your existing currentPlaylist variable
     if (!playlistName) return;
