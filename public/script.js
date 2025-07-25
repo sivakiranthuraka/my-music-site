@@ -599,30 +599,34 @@ document
 
     const playlistName = currentPlaylist; // use your existing currentPlaylist variable
     if (!playlistName) return;
-    for (let song of selectedSongs) {
-      try {
-        if (selectionMode === "add") {
-          await fetch(`/api/playlists/${playlistName}/songs`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ song }),
-          });
-        } else if (selectionMode === "delete") {
-          await fetch(`/api/playlists/${playlistName}songs`, {
+    const requests = selectedSongs.map((song) => {
+      if (selectionMode === "add") {
+        return fetch(`/api/playlists/${playlistName}/songs`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ song }),
+        });
+      } else {
+        return fetch(
+          `/api/playlists/${playlistName}/songs/${encodeURIComponent(song)}`,
+          {
             method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ song }),
-          });
-        }
-      } catch (err) {
-        console.error(err);
-        showToast("Error processing songs.");
+          }
+        );
       }
-    }
+    });
 
-    showToast(
-      `Songs ${selectionMode === "add" ? "added to" : "deleted from"} playlist`
-    );
+    try {
+      await Promise.all(requests);
+      showToast(
+        `Songs ${
+          selectionMode === "add" ? "added to" : "deleted from"
+        } playlist`
+      );
+    } catch (err) {
+      console.error(err);
+      showToast("Error processing songs.");
+    }
     loadPlaylistSongs(playlistName); // reload playlist view
     exitSelectionMode();
   });
